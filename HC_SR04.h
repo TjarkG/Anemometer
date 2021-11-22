@@ -36,6 +36,12 @@
 # define TRIG_PIN PINB1
 #endif
 
+short getSensorHight(void);
+void getNReadings(short *nArray, unsigned char n);
+void quicksort(short* data, unsigned char n);
+unsigned short getAverageReding(const unsigned char n);
+unsigned short getMedianReding(const unsigned char n);
+
 short getSensorHight(void) //returns Distance in mm
 {
 	TGR_LOW;
@@ -64,16 +70,27 @@ void getNReadings(short *nArray, unsigned char n)
 	}
 }
 
-void linSort(short* data, unsigned char length)
+void quicksort(short* data, unsigned char n)       //sorts data till n ascending
 {
-	for (unsigned char i = 0; i < length; i++)
-		for (unsigned char j = 0; j < length-i-1; j++)
-			if (data[j] > data[j + 1])
-			{
-				short temp = data[j];
-				data[j] = data[j + 1];
-				data[j + 1] = temp;
-			}
+  if (n < 2) return;
+ 
+  int pivot = data[n / 2];
+ 
+  int i, j;
+  for (i = 0, j = n - 1; ; i++, j--)
+  {
+    while (data[i] < pivot) i++;
+    while (data[j] > pivot) j--;
+ 
+    if (i >= j) break;
+ 
+    int temp = data[i];
+    data[i]     = data[j];
+    data[j]     = temp;
+  }
+ 
+  quicksort(data, i);
+  quicksort(data + i, n - i);
 }
 
 unsigned short getAverageReding(const unsigned char n)
@@ -92,7 +109,7 @@ unsigned short getMedianReding(const unsigned char n)
 {
 	short readings[n];
 	getNReadings(readings, n);
-	linSort(readings, n);
+	quicksort(readings, n);
 	return n % 2 ? readings[n / 2] : (readings[n / 2 - 1] + readings[n / 2]) / 2;
 }
 
