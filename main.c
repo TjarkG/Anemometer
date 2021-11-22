@@ -1,16 +1,9 @@
 /*
- * MotorController.c
+ * main.c for ultrasonic anemometer
  *
- * Created: 04.05.2021 20:41:36
+ * Created: 22.11.2021 13:52
  * Author : tjark
- * Target : Motorcontroller.brd
- */ 
-/*
- * Bitmap Corection Word:
- * Bit		Function
- * 0-1		Allways ON
- * 2-11 	corection factor
- * 12-15	level
+ * Target : //TODO
  */
 
 #ifndef __AVR_ATtiny2313__
