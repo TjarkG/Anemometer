@@ -37,6 +37,7 @@
 #endif
 
 short getSensorHight(void);
+short getSensorTime(void);
 void getNReadings(short *nArray, unsigned char n);
 void quicksort(short* data, unsigned char n);
 unsigned short getAverageReding(const unsigned char n);
@@ -55,10 +56,23 @@ short getSensorHight(void) //returns Distance in mm
 	while( ECHO && out++ < SMAX )
 		_delay_us(9);
 	
-	out = (out*VSOUND*CORFAC)/20000;		//convert m/s to mm per 10 �s, divides by 2 and applies a Correction Factor ( out *= ((VSOUND/200.0)*CORFAC) )
+	out = (out*VSOUND*CORFAC)/20000;		//convert m/s to mm per 10 µs, divides by 2 and applies a Correction Factor ( out *= ((VSOUND/200.0)*CORFAC) )
 	TGR_HIGH;
 	_delay_ms(15);
 	return (i>=TMAX || out>SMAX)? -1 : out;
+}
+
+short getSensorTime(void) //returns Time in µs*10
+{
+	TGR_LOW;
+	
+	unsigned long out = 0;
+	while( !ECHO && out++ < TMAX )
+		_delay_us(9);
+	
+	TGR_HIGH;
+	_delay_ms(15);
+	return (out>TMAX)? -1 : out;
 }
 
 void getNReadings(short *nArray, unsigned char n)
