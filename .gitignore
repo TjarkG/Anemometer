@@ -70,4 +70,4 @@ include/*
 *.b#*
 
 #VS Code Config File: has to be different for Windows and Linux
-~/c_cpp_properties.json
+c_cpp_properties.json
