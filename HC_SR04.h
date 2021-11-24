@@ -12,11 +12,13 @@
 
 #include <avr/io.h>
 #include <util/delay.h>
+#include <stdbool.h>
 
 #define VSOUND	343		//speed of sound in m/s
 #define CORFAC	110		//correction factor in %
 #define SMAX	3000	//maximum distance from the sensor in mm
-#define TMAX	5000	//maximum time waiting for a pulse in �s
+#define TMAX	5000	//maximum time waiting for a pulse in µs
+#define TFAC	7		//Clock Cycels per Loop
 
 #define TGR_HIGH	TRIG_PORT |= (1<<TRIG_PIN)
 #define TGR_LOW		TRIG_PORT &= ~(1<<TRIG_PIN)
@@ -37,7 +39,7 @@
 #endif
 
 short getSensorHight(void);
-short getSensorTime(void);
+long getSensorTime(void);
 void getNReadings(short *nArray, unsigned char n);
 void quicksort(short* data, unsigned char n);
 unsigned short getAverageReding(const unsigned char n);
@@ -62,16 +64,22 @@ short getSensorHight(void) //returns Distance in mm
 	return (i>=TMAX || out>SMAX)? -1 : out;
 }
 
-short getSensorTime(void) //returns Time in µs*10
+long getSensorTime(void) //returns Time in µs
 {
+	bool echoOld = !ECHO;
+	unsigned short out = 0;
+
 	TGR_LOW;
 	
-	unsigned long out = 0;
-	while( !ECHO && out++ < TMAX )
-		_delay_us(9);
+	//TODO: Inline Assembly
+	//Dont Change this Loop or the data Type of out without updating TFAC
+	while( ECHO == echoOld)
+		out++;
 	
+	//Formula for time elapsed: 1/F_CPU (Time per Clockcycle) *TFAC (number of Clockcycles) * out (number of Loops) *10^6 (Conversion to µs)
+	out *= ((1000000000UL*TFAC)/F_CPU);
+	out /= 1000UL;
 	TGR_HIGH;
-	_delay_ms(15);
 	return (out>TMAX)? -1 : out;
 }
 
