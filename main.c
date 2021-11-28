@@ -4,6 +4,9 @@
  * Created: 22.11.2021 13:52
  * Author : tjark
  * Target : Anemometer.sch
+ * 
+ * Fuses: 
+ * avrdude -U lfuse:w:0xe4:m -U hfuse:w:0x9b:m -U efuse:w:0xff:m -c avrispmkII -p attiny2313
  */
 
 #ifndef __AVR_ATtiny2313A__
@@ -13,7 +16,7 @@
 #define F_CPU 8000000UL
 #define S_SENSOR 100        //Distance betwen Sensors in mm
 
-#define ECHO (PIND & 0x02)
+#define ECHO (PIND & (1 << 2))
 #define TRIG_PORT PORTD
 #define TRIG_PIN PIND3
 
@@ -34,8 +37,9 @@ int main(void)
         if(time > 0)
         {
             //v = d/t
-            long velocity = S_SENSOR/(time*1000);
-            uartWriteIntLine(velocity);
+            //long velocity = S_SENSOR/(time*1000);
+            //uartWriteIntLine(velocity);
+            uartWriteIntLine(time);
         }
         else
         {

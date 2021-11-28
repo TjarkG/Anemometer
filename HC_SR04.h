@@ -12,7 +12,6 @@
 
 #include <avr/io.h>
 #include <util/delay.h>
-#include <stdbool.h>
 
 #define VSOUND	343		//speed of sound in m/s
 #define CORFAC	110		//correction factor in %
@@ -66,20 +65,21 @@ short getSensorHight(void) //returns Distance in mm
 
 long getSensorTime(void) //returns Time in µs
 {
-	bool echoOld = !ECHO;
 	unsigned short out = 0;
 
 	TGR_LOW;
 	
 	//TODO: Inline Assembly
 	//Dont Change this Loop or the data Type of out without updating TFAC
-	while( ECHO == echoOld)
+	while(!ECHO)
 		out++;
 	
 	//Formula for time elapsed: 1/F_CPU (Time per Clockcycle) *TFAC (number of Clockcycles) * out (number of Loops) *10^6 (Conversion to µs)
 	out *= ((1000000000UL*TFAC)/F_CPU);
 	out /= 1000UL;
+	_delay_ms(1);
 	TGR_HIGH;
+	_delay_ms(3);
 	return (out>TMAX)? -1 : out;
 }
 
