@@ -13,9 +13,9 @@
 #define F_CPU 8000000UL
 #define S_SENSOR 100        //Distance betwen Sensors in mm
 
-# define ECHO (PIND & 0x02)
-# define TRIG_PORT PORTD
-# define TRIG_PIN PIND3
+#define ECHO (PIND & 0x02)
+#define TRIG_PORT PORTD
+#define TRIG_PIN PIND3
 
 #include <avr/io.h>
 #include <avr/interrupt.h>
