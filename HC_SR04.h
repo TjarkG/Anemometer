@@ -17,7 +17,8 @@
 #define CORFAC	110		//correction factor in %
 #define SMAX	3000	//maximum distance from the sensor in mm
 #define TMAX	5000	//maximum time waiting for a pulse in µs
-#define TFAC	7		//Clock Cycels per Loop
+#define TFAC	9		//Clock Cycels per Loop
+#define F_CPU 	8000000UL	//CPU Frequency
 
 #define TGR_HIGH	TRIG_PORT |= (1<<TRIG_PIN)
 #define TGR_LOW		TRIG_PORT &= ~(1<<TRIG_PIN)
@@ -66,21 +67,25 @@ short getSensorHight(void) //returns Distance in mm
 long getSensorTime(void) //returns Time in µs
 {
 	unsigned short out = 0;
+	unsigned short i = 0;
 
 	TGR_LOW;
-	
+
+	while(!ECHO && ++i <= TMAX);
+		if(i >= TMAX)
+			return -2;
+
 	//TODO: Inline Assembly
 	//Dont Change this Loop or the data Type of out without updating TFAC
-	while(!ECHO)
-		out++;
+	while(!REC && out++ < SMAX );
 	
-	//Formula for time elapsed: 1/F_CPU (Time per Clockcycle) *TFAC (number of Clockcycles) * out (number of Loops) *10^6 (Conversion to µs)
-	out *= ((1000000000UL*TFAC)/F_CPU);
-	out /= 1000UL;
-	_delay_ms(1);
 	TGR_HIGH;
+	//Formula for time elapsed: 1/F_CPU (Time per Clockcycle) *TFAC (number of Clockcycles) * out (number of Loops) *10^6 (Conversion to µs)
+	long outLong = out;
+	outLong *= (((1000000000ULL*TFAC)/F_CPU)-2*TFAC);
+	outLong /= 1000UL;
 	_delay_ms(3);
-	return (out>TMAX)? -1 : out;
+	return (out>TMAX)? -1 : outLong;
 }
 
 void getNReadings(short *nArray, unsigned char n)

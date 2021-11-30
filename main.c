@@ -16,7 +16,8 @@
 #define F_CPU 8000000UL
 #define S_SENSOR 100        //Distance betwen Sensors in mm
 
-#define ECHO (PIND & (1 << 2))
+#define REC (PIND & (1 << 2))
+#define ECHO (PIND & (1 << 4))
 #define TRIG_PORT PORTD
 #define TRIG_PIN PIND3
 
@@ -33,7 +34,8 @@ int main(void)
 
     while(1)
     {
-        long time = getSensorTime();
+        long time = 0;
+        time = getSensorTime();
         if(time > 0)
         {
             //v = d/t
@@ -45,5 +47,6 @@ int main(void)
         {
             uartWriteString("Timeout\r\n");
         }
+        _delay_ms(100);
     }
 }
