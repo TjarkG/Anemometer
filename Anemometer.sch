@@ -8707,7 +8707,7 @@ Source: AVX .. aphvc.pdf</description>
 <busses>
 </busses>
 <nets>
-<net name="ECHO" class="0">
+<net name="REC" class="0">
 <segment>
 <pinref part="IC1" gate="G$1" pin="(INT0)PD2"/>
 <wire x1="17.78" y1="-20.32" x2="35.56" y2="-20.32" width="0.1524" layer="91"/>
@@ -8839,6 +8839,13 @@ Source: AVX .. aphvc.pdf</description>
 <pinref part="P+4" gate="VCC" pin="VCC"/>
 <wire x1="55.88" y1="-38.1" x2="48.26" y2="-38.1" width="0.1524" layer="91"/>
 <wire x1="48.26" y1="-38.1" x2="48.26" y2="-27.94" width="0.1524" layer="91"/>
+</segment>
+</net>
+<net name="ECHO" class="0">
+<segment>
+<pinref part="IC1" gate="G$1" pin="(T0)PD4"/>
+<wire x1="17.78" y1="-15.24" x2="35.56" y2="-15.24" width="0.1524" layer="91"/>
+<label x="20.32" y="-15.24" size="1.778" layer="95"/>
 </segment>
 </net>
 </nets>

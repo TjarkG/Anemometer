@@ -16,7 +16,7 @@
 #define F_CPU 8000000UL
 #define S_SENSOR 100        //Distance betwen Sensors in mm
 
-#define REC (PIND & (1 << 2))
+#define REC (PIND & (1 << 6))
 #define ECHO (PIND & (1 << 4))
 #define TRIG_PORT PORTD
 #define TRIG_PIN PIND3
@@ -31,12 +31,13 @@ int main(void)
 {
     DDRD = (1 << 3) | (1 << 1);
     uartInit();
+    start_Timer_1();        //Timer for Messuring Sensor Delay
 
     while(1)
     {
         long time = 0;
         time = getSensorTime();
-        if(time > 0)
+        if(time >= 0)
         {
             //v = d/t
             //long velocity = S_SENSOR/(time*1000);

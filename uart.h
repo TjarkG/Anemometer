@@ -28,7 +28,7 @@
 } 
  
  /* itoa:  convert n to characters in s */
- void _itoa(unsigned long n, char s[])
+ void _itoa(long n, char s[])
  {
      unsigned long i, sign;
 
@@ -57,7 +57,7 @@ void uartWriteString(const char *in)
         USART_Transmit(*in++);
 }
 
-void uartWriteIntLine(unsigned long in)
+void uartWriteIntLine(long in)
 {
     char tmp[12];
     _itoa(in,tmp);
