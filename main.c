@@ -16,7 +16,7 @@
 #define F_CPU 8000000UL
 #define S_SENSOR 100        //Distance betwen Sensors in mm
 
-#define ECHO (PIND & (1 << 4))
+#define ECHO (PIND & (1 << 6))
 #define TRIG_PORT PORTD
 #define TRIG_PIN PIND3
 
