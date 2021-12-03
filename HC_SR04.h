@@ -49,6 +49,8 @@ void quicksort(short* data, unsigned char n);
 unsigned short getAverageReding(const unsigned char n);
 unsigned short getMedianReding(const unsigned char n);
 
+volatile unsigned int pulse;
+
 short getSensorHight(void) //returns Distance in mm
 {
 	TGR_LOW;
@@ -75,28 +77,28 @@ void start_Timer_1(void)
 	TCCR1C = 0x00;
 	TCNT1 = 0;
 
-	TIMSK |= (1 << ICIE1);		//Set capture interrupt
+	TIMSK |= (1 << ICIE1);		//set capture interrupt
 	sei();
-	TCCR1B |= (1 << ICES1);		//Set capture rising edge
+	TCCR1B |= (1 << ICES1);		//set sampling edge rissing
 }
-
-volatile unsigned int pulseStart;
-volatile unsigned int pulseEnd;
-volatile unsigned int pulseInUs;
-volatile unsigned char edge = 0;
 
 long getSensorTime(void) //returns Time in µs
 {
-	unsigned short out = 0;
-	TCNT1 = 0;
-	edge = 0;
+	unsigned int out = 0;
+	unsigned int pulseStart;
+	unsigned int pulseEnd;
+
+	TCNT1 = 0;					//clear counter
+	TCCR1B |= (1 << ICES1);		//set sampling edge rissing
 	TGR_LOW;
 
 	while(!ECHO);
-	edge = 1;
+	pulseStart = pulse;
+	TCCR1B &= ~(1 << ICES1);	//set sampling edge falling
 
 	while(ECHO);
-	out = pulseInUs;
+	pulseEnd = pulse;
+	out = pulseEnd - pulseStart;
 
 	TGR_HIGH;
 
@@ -105,16 +107,9 @@ long getSensorTime(void) //returns Time in µs
 	return out;
 }
 
-ISR(TIMER1_CAPT_vect){
-	if(edge == 0){
-		pulseStart = ICR1;					//copy capture value
-		TCCR1B &= ~(1 << ICES1);			//toggle capture edge						
-	}
-	else{
-		pulseEnd = ICR1;					//copy capture value
-		TCCR1B |= (1 << ICES1);				//toggle capture edge
-		pulseInUs = pulseEnd - pulseStart;
-	}
+ISR(TIMER1_CAPT_vect)
+{
+	pulse = ICR1;
 }
 
 void getNReadings(short *nArray, unsigned char n)
