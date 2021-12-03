@@ -42,33 +42,11 @@
 # define TRIG_PIN PINB1
 #endif
 
-short getSensorHight(void);
+void start_Timer_1(void);
 long getSensorTime(void);
 void getNReadings(short *nArray, unsigned char n);
-void quicksort(short* data, unsigned char n);
-unsigned short getAverageReding(const unsigned char n);
-unsigned short getMedianReding(const unsigned char n);
 
 volatile unsigned int pulse;
-
-short getSensorHight(void) //returns Distance in mm
-{
-	TGR_LOW;
-	_delay_us(10);
-	
-	unsigned short i = 0;
-	while( !ECHO && i++ <= TMAX )
-		_delay_us(1);
-	
-	unsigned long out = 0;
-	while( ECHO && out++ < SMAX )
-		_delay_us(9);
-	
-	out = (out*VSOUND*CORFAC)/20000;		//convert m/s to mm per 10 µs, divides by 2 and applies a Correction Factor ( out *= ((VSOUND/200.0)*CORFAC) )
-	TGR_HIGH;
-	_delay_ms(15);
-	return (i>=TMAX || out>SMAX)? -1 : out;
-}
 
 void start_Timer_1(void)
 {
@@ -107,11 +85,6 @@ long getSensorTime(void) //returns Time in µs
 	return out;
 }
 
-ISR(TIMER1_CAPT_vect)
-{
-	pulse = ICR1;
-}
-
 void getNReadings(short *nArray, unsigned char n)
 {
 	while( n-- > 0 )
@@ -121,47 +94,9 @@ void getNReadings(short *nArray, unsigned char n)
 	}
 }
 
-void quicksort(short* data, unsigned char n)       //sorts data till n ascending
+ISR(TIMER1_CAPT_vect)
 {
-  if (n < 2) return;
- 
-  int pivot = data[n / 2];
- 
-  int i, j;
-  for (i = 0, j = n - 1; ; i++, j--)
-  {
-    while (data[i] < pivot) i++;
-    while (data[j] > pivot) j--;
- 
-    if (i >= j) break;
- 
-    int temp = data[i];
-    data[i]     = data[j];
-    data[j]     = temp;
-  }
- 
-  quicksort(data, i);
-  quicksort(data + i, n - i);
-}
-
-unsigned short getAverageReding(const unsigned char n)
-{
-	short readings[n];
-	getNReadings(readings, n);
-	
-	unsigned long average = 0;
-	for (unsigned char i = 0; i<n; i++)
-		average += readings[i];
-	average /= n;
-	return average;
-}
-
-unsigned short getMedianReding(const unsigned char n)
-{
-	short readings[n];
-	getNReadings(readings, n);
-	quicksort(readings, n);
-	return n % 2 ? readings[n / 2] : (readings[n / 2 - 1] + readings[n / 2]) / 2;
+	pulse = ICR1;
 }
 
 #endif /* HC_SR04_H_ */
