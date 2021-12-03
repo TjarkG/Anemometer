@@ -71,6 +71,10 @@ void start_Timer_1(void)
 	TCCR1B = (1<<CS10);
 	TCCR1C = 0x00;
 	TCNT1 = 0;
+
+	TIMSK |= (1 << ICIE1);		//Set capture interrupt
+	//sei();
+	TCCR1B |= (1 << ICES1);		
 }
 
 long getSensorTime(void) //returns Time in µs
@@ -81,11 +85,12 @@ long getSensorTime(void) //returns Time in µs
 	while(!ECHO);
 	TCNT1 = 0;		//reset Timer 1
 
-	while(!REC);
+	while(ECHO);
 
 	out = TCNT1;
-	out -= OFFSET;
 	TGR_HIGH;
+
+	out -= OFFSET;
 	_delay_ms(4);
 	return out;
 }
