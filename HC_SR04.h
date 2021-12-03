@@ -18,11 +18,14 @@
 #define CORFAC	110		//correction factor in %
 #define SMAX	3000	//maximum distance from the sensor in mm
 #define TMAX	5000	//maximum time waiting for a pulse in µs
-#define OFFSET	44		//Timer Cycles to subtract from messured time
+#define OFFSET	0		//Timer Cycles to subtract from messured time
 #define F_CPU 	8000000UL	//CPU Frequency
 
 #define TGR_HIGH	TRIG_PORT |= (1<<TRIG_PIN)
 #define TGR_LOW		TRIG_PORT &= ~(1<<TRIG_PIN)
+
+#define START_TIMER TCCR1B |= (1 << CS10)
+#define STOP_TIMER TCCR1B &= ~(1 << CS10)
 
 #ifndef ECHO
 # warning "ECHO not defined for <HC_SR04.h>"
@@ -73,26 +76,45 @@ void start_Timer_1(void)
 	TCNT1 = 0;
 
 	TIMSK |= (1 << ICIE1);		//Set capture interrupt
-	//sei();
-	TCCR1B |= (1 << ICES1);		
+	sei();
+	TCCR1B |= (1 << ICES1);		//Set capture rising edge
 }
+
+volatile unsigned int pulseStart;
+volatile unsigned int pulseEnd;
+volatile unsigned int pulseInUs;
+volatile unsigned char edge = 0;
 
 long getSensorTime(void) //returns Time in µs
 {
 	unsigned short out = 0;
+	TCNT1 = 0;
+	edge = 0;
 	TGR_LOW;
 
 	while(!ECHO);
-	TCNT1 = 0;		//reset Timer 1
+	edge = 1;
 
 	while(ECHO);
+	out = pulseInUs;
 
-	out = TCNT1;
 	TGR_HIGH;
 
 	out -= OFFSET;
 	_delay_ms(4);
 	return out;
+}
+
+ISR(TIMER1_CAPT_vect){
+	if(edge == 0){
+		pulseStart = ICR1;					//copy capture value
+		TCCR1B &= ~(1 << ICES1);			//toggle capture edge						
+	}
+	else{
+		pulseEnd = ICR1;					//copy capture value
+		TCCR1B |= (1 << ICES1);				//toggle capture edge
+		pulseInUs = pulseEnd - pulseStart;
+	}
 }
 
 void getNReadings(short *nArray, unsigned char n)
