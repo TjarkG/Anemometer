@@ -14,9 +14,6 @@
 #include <avr/interrupt.h>
 #include <util/delay.h>
 
-#define VSOUND	343		//speed of sound in m/s
-#define CORFAC	110		//correction factor in %
-#define SMAX	3000	//maximum distance from the sensor in mm
 #define TMAX	5000	//maximum time waiting for a pulse in µs
 #define OFFSET	0		//Timer Cycles to subtract from messured time
 
@@ -55,18 +52,22 @@ void start_Timer_1(void)
 long getSensorTime(void) //returns Time in µs
 {
 	unsigned int out = 0;
+	unsigned int i = 0;
+
 	TCNT1 = 0;					//clear counter
 	TGR_LOW;
 
-	while(!TIME);
+	while(!TIME && ++i < TMAX)
+		_delay_us(1);
 
-	while(TIME);
+	while(TIME && ++i < TMAX)
+		_delay_us(1);
 	out = (TCNT1<<2) | ((!!PULS)<<1) | (!!PULS2);	//combine internall counter with state of input pins
 	TGR_HIGH;
 
 	out -= OFFSET;
-	_delay_ms(3);
-	return out;
+	_delay_ms(2);
+	return i>=TMAX? 0 : out;
 }
 
 #endif /* HC_SR04_H_ */

@@ -42,7 +42,7 @@ int main(void)
             //v = d/t
             //long velocity = S_SENSOR/(time*1000);
             //uartWriteIntLine(velocity);
-            uartWriteIntLine((time*10/16));
+            uartWriteIntLine(time);
         }
         else
         {

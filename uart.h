@@ -57,6 +57,12 @@ void uartWriteString(const char *in)
         USART_Transmit(*in++);
 }
 
+void uartWriteInt(const signed int in)  //send an int in hex
+{
+    USART_Transmit((in>>8));
+    USART_Transmit(in & 0xFF);
+}
+
 void uartWriteIntLine(long in)
 {
     char tmp[12];

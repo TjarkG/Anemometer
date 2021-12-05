@@ -11383,7 +11383,7 @@ Source: 008-0260-0_E.pdf</description>
 <part name="GND15" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device=""/>
 <part name="FRAME4" library="frames" library_urn="urn:adsk.eagle:library:229" deviceset="A4L-LOC" device="" value="Frame"/>
 <part name="IC8" library="74xx-us" library_urn="urn:adsk.eagle:library:88" deviceset="74*393" device="D" package3d_urn="urn:adsk.eagle:package:2917/1" technology="LS" value="74HC393D"/>
-<part name="IC7" library="74xx-us" library_urn="urn:adsk.eagle:library:88" deviceset="74*04" device="D" package3d_urn="urn:adsk.eagle:package:2917/1" technology="ALS"/>
+<part name="IC7" library="74xx-us" library_urn="urn:adsk.eagle:library:88" deviceset="74*04" device="D" package3d_urn="urn:adsk.eagle:package:2917/1" technology="ALS" value="74CH14D"/>
 <part name="P+12" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="VCC" device=""/>
 <part name="GND16" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device=""/>
 <part name="GND17" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device=""/>
