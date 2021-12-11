@@ -6,14 +6,14 @@
  * Target : Anemometer.sch
  * 
  * Fuses: 
- * avrdude -U lfuse:w:0xe4:m -U hfuse:w:0x9b:m -U efuse:w:0xff:m -c avrispmkII -p attiny2313
+ * avrdude -U lfuse:w:0xff:m -U hfuse:w:0x9b:m -U efuse:w:0xff:m -c avrispmkII -p attiny2313
  */
 
 #ifndef __AVR_ATtiny2313A__
 #define __AVR_ATtiny2313A__
 #endif
 
-#define F_CPU 8000000UL
+#define F_CPU 16000000UL
 #define S_SENSOR 200        //Distance betwen Sensors in mm
 
 #define TIME    (PIND & (1 << 6))
@@ -30,7 +30,7 @@
 
 int main(void)
 {
-    DDRD = (1 << 3) | (1 << 1);
+    DDRD = (1 << 1) | (1 << 3);
     uartInit();
     start_Timer_1();        //Timer for Messuring Sensor Delay
 
@@ -48,6 +48,6 @@ int main(void)
         {
             uartWriteString("Timeout\r\n");
         }
-        _delay_ms(100);
+        _delay_ms(50);
     }
 }
