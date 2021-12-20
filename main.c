@@ -31,6 +31,7 @@
 int main(void)
 {
     DDRD = (1 << 1) | (1 << 3);
+    DDRB = (1 << 0) | (1 << 1) | (1 << 2);
     uartInit();
     start_Timer_1();        //Timer for Messuring Sensor Delay
 

@@ -17,8 +17,8 @@
 #define TMAX	5000	//maximum time waiting for a pulse in µs
 #define OFFSET	0		//Timer Cycles to subtract from messured time
 
-#define TGR_HIGH	TRIG_PORT |= (1<<TRIG_PIN)
-#define TGR_LOW		TRIG_PORT &= ~(1<<TRIG_PIN)
+#define TGR_HIGH	TRIG_PORT &= ~(1<<TRIG_PIN)
+#define TGR_LOW		TRIG_PORT |= (1<<TRIG_PIN)
 
 #define START_TIMER TCCR1B |= (1 << CS10)
 #define STOP_TIMER TCCR1B &= ~(1 << CS10)
@@ -43,6 +43,8 @@ long getSensorTime(void);
 
 void start_Timer_1(void)
 {
+	TGR_HIGH;
+	
 	TCCR1A = 0x00;
 	TCCR1B = (1<<CS11) | (1<<CS12) | (1<<CS10);
 	TCCR1C = 0x00;
