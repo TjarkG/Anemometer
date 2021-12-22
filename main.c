@@ -28,6 +28,8 @@
 #include "HC_SR04.h"
 #include "uart.h"
 
+void setAdr(char adr);
+
 int main(void)
 {
     DDRD = (1 << 1) | (1 << 3);
@@ -37,6 +39,7 @@ int main(void)
 
     while(1)
     {
+        setAdr(0);
         long time = getSensorTime();
         if(time >= 0)
         {
@@ -51,4 +54,12 @@ int main(void)
         }
         _delay_ms(50);
     }
+}
+
+void setAdr(char adr)
+{
+    unsigned char tmp = PINB;
+    tmp &= ~(0x07);
+    tmp |= (adr & 0x07);
+    PORTB = tmp;
 }
