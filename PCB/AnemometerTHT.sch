@@ -11397,6 +11397,7 @@ Source: 008-0260-0_E.pdf</description>
 <part name="C11" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="C-EU" device="050-030X075" package3d_urn="urn:adsk.eagle:package:23640/1"/>
 <part name="GND20" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device=""/>
 <part name="P+13" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="VCC" device=""/>
+<part name="P+14" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="VCC" device=""/>
 </parts>
 <sheets>
 <sheet>
@@ -12005,15 +12006,18 @@ Source: 008-0260-0_E.pdf</description>
 <instance part="GND14" gate="1" x="99.06" y="15.24" smashed="yes" rot="MR0">
 <attribute name="VALUE" x="101.6" y="12.7" size="1.778" layer="96" rot="MR0"/>
 </instance>
+<instance part="P+14" gate="VCC" x="43.18" y="139.7" smashed="yes">
+<attribute name="VALUE" x="40.64" y="139.7" size="1.778" layer="96"/>
+</instance>
 </instances>
 <busses>
 </busses>
 <nets>
 <net name="TRIG" class="0">
 <segment>
-<pinref part="IC6" gate="A" pin="G1"/>
-<wire x1="45.72" y1="119.38" x2="25.4" y2="119.38" width="0.1524" layer="91"/>
-<label x="25.4" y="119.38" size="1.778" layer="95" rot="R180" xref="yes"/>
+<label x="25.4" y="116.84" size="1.778" layer="95" rot="R180" xref="yes"/>
+<pinref part="IC6" gate="A" pin="G2A"/>
+<wire x1="45.72" y1="116.84" x2="25.4" y2="116.84" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="GND" class="0">
@@ -12086,10 +12090,6 @@ Source: 008-0260-0_E.pdf</description>
 <pinref part="IC6" gate="A" pin="G2B"/>
 <wire x1="43.18" y1="99.06" x2="43.18" y2="114.3" width="0.1524" layer="91"/>
 <wire x1="43.18" y1="114.3" x2="45.72" y2="114.3" width="0.1524" layer="91"/>
-<pinref part="IC6" gate="A" pin="G2A"/>
-<wire x1="45.72" y1="116.84" x2="43.18" y2="116.84" width="0.1524" layer="91"/>
-<wire x1="43.18" y1="116.84" x2="43.18" y2="114.3" width="0.1524" layer="91"/>
-<junction x="43.18" y="114.3"/>
 </segment>
 <segment>
 <pinref part="R8" gate="G$1" pin="1"/>
@@ -12154,6 +12154,12 @@ Source: 008-0260-0_E.pdf</description>
 <pinref part="P+10" gate="VCC" pin="VCC"/>
 <wire x1="236.22" y1="157.48" x2="236.22" y2="149.86" width="0.1524" layer="91"/>
 <wire x1="236.22" y1="149.86" x2="233.68" y2="149.86" width="0.1524" layer="91"/>
+</segment>
+<segment>
+<pinref part="IC6" gate="A" pin="G1"/>
+<pinref part="P+14" gate="VCC" pin="VCC"/>
+<wire x1="45.72" y1="119.38" x2="43.18" y2="119.38" width="0.1524" layer="91"/>
+<wire x1="43.18" y1="119.38" x2="43.18" y2="137.16" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="REC_1" class="0">
