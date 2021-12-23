@@ -13,8 +13,9 @@
 #define __AVR_ATtiny2313A__
 #endif
 
-#define F_CPU 16000000UL
-#define S_SENSOR 200        //Distance betwen Sensors in mm
+#define F_CPU       16000000UL
+#define S_SENSOR    200         //Distance betwen Sensors in mm
+#define Nr_Sens     2           //Number of Sensors connected
 
 #define TIME    (PIND & (1 << 6))
 #define PULS    (PIND & (1 << 5))
@@ -39,19 +40,17 @@ int main(void)
 
     while(1)
     {
-        setAdr(0);
-        long time = getSensorTime();
-        if(time >= 0)
+        unsigned int time[Nr_Sens];
+        for (unsigned char i = 0; i < Nr_Sens; i++)
         {
-            //v = d/t
-            //long velocity = S_SENSOR/(time*1000);
-            //uartWriteIntLine(velocity);
-            uartWriteIntLine(time);
+            setAdr(i);
+            time[i] = getSensorTime();
         }
-        else
-        {
-            uartWriteString("Timeout\r\n");
-        }
+        
+        //v = d/t
+        //long velocity = S_SENSOR/(time*1000);
+        //uartWriteIntLine(velocity);
+        uartWriteIntArray(time, sizeof(time));
         _delay_ms(50);
     }
 }

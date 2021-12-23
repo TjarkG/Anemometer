@@ -39,7 +39,7 @@
 #endif
 
 void start_Timer_1(void);
-long getSensorTime(void);
+unsigned int getSensorTime(void);
 
 void start_Timer_1(void)
 {
@@ -51,7 +51,7 @@ void start_Timer_1(void)
 	TCNT1 = 0;
 }
 
-long getSensorTime(void) //returns Time in µs
+unsigned int getSensorTime(void) //returns Time in µs
 {
 	unsigned int out = 0;
 	unsigned int i = 0;

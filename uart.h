@@ -71,6 +71,18 @@ void uartWriteIntLine(long in)
     uartWriteString("\r\n");
 }
 
+void uartWriteIntArray(int in[], unsigned char n)
+{
+    for (unsigned char i = 0; i < n; i++)
+    {
+        char tmp[12];
+        _itoa(in[i],tmp);
+        uartWriteString(tmp);
+        uartWriteString("\t");
+    }
+    uartWriteString("\r\n");
+}
+
 void uartInit(void)
 {
     UBRRH = UBRR_VAL >> 8;
