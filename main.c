@@ -50,7 +50,7 @@ int main(void)
         //v = d/t
         //long velocity = S_SENSOR/(time*1000);
         //uartWriteIntLine(velocity);
-        uartWriteIntArray(time, sizeof(time));
+        uartWriteIntArray(time, Nr_Sens);
         _delay_ms(50);
     }
 }
@@ -59,6 +59,6 @@ void setAdr(char adr)
 {
     unsigned char tmp = PINB;
     tmp &= ~(0x07);
-    tmp |= (adr & 0x07);
+    tmp |= ((!!(adr & (1<<2))) << 0) | ((!!(adr & (1<<1))) << 1) | ((!!(adr & (1<<0))) << 2);
     PORTB = tmp;
 }
