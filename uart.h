@@ -71,7 +71,7 @@ void uartWriteIntLine(long in)
     uartWriteString("\r\n");
 }
 
-void uartWriteIntArray(int in[], unsigned char n)
+void uartWriteIntArray(unsigned int in[], unsigned char n)
 {
     for (unsigned char i = 0; i < n; i++)
     {
