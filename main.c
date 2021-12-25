@@ -30,6 +30,7 @@
 #include "uart.h"
 
 void setAdr(char adr);
+int velocity(unsigned int t1, unsigned int t2);
 
 int main(void)
 {
@@ -49,7 +50,9 @@ int main(void)
         
         //v = d/t
         //long velocity = S_SENSOR/(time*1000);
-        //uartWriteIntLine(velocity);
+        uartWriteInt(velocity(time[0], time[1]));
+        //uartWriteIntLine(abs(((int)time[1]) - ((int)time[0])));
+
         uartWriteIntArray(time, Nr_Sens);
         _delay_ms(50);
     }
@@ -61,4 +64,9 @@ void setAdr(char adr)
     tmp &= ~(0x07);
     tmp |= ((!!(adr & (1<<2))) << 0) | ((!!(adr & (1<<1))) << 1) | ((!!(adr & (1<<0))) << 2);
     PORTB = tmp;
+}
+
+int velocity(unsigned int t1, unsigned int t2)  //returns velocity in cm/s
+{
+    return ((S_SENSOR*(F_CPU/100))/t1) - ((S_SENSOR*(F_CPU/100))/t2);
 }

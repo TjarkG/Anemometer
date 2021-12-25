@@ -68,7 +68,7 @@ unsigned int getSensorTime(void) //returns Time in µs
 	TGR_HIGH;
 
 	out -= OFFSET;
-	_delay_ms(2);
+	_delay_ms(3);
 	return i>=TMAX? 0 : out;
 }
 

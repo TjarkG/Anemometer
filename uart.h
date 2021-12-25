@@ -57,10 +57,18 @@ void uartWriteString(const char *in)
         USART_Transmit(*in++);
 }
 
-void uartWriteInt(const signed int in)  //send an int in hex
+void uartWriteWord(const signed int in)  //send an int in hex
 {
     USART_Transmit((in>>8));
     USART_Transmit(in & 0xFF);
+}
+
+void uartWriteInt(long in)
+{
+    char tmp[12];
+    _itoa(in,tmp);
+    uartWriteString(tmp);
+    uartWriteString("\t");
 }
 
 void uartWriteIntLine(long in)
