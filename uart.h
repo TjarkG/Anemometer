@@ -30,7 +30,7 @@
  /* itoa:  convert n to characters in s */
  void _itoa(long n, char s[])
  {
-     unsigned long i, sign;
+    long i, sign;
 
      if ((sign = n) < 0)  /* record sign */
          n = -n;          /* make n positive */
