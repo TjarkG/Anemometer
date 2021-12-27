@@ -1,3 +1,3 @@
 # Anemometer
 
-Ultrasonic Anemometer based an cheap distance Sensors
+Ultrasonic Anemometer based on an cheap distance Sensors
