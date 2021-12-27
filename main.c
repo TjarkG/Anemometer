@@ -26,8 +26,12 @@
 
 #define SET0    (PINB & (1 << 4))
 
+#define writeOfs(adr, value)    eeprom_write_word((uint16_t*) (unsigned int) (adr), (value) )
+#define readOfs(i)              ((int) eeprom_read_word((uint16_t*) (unsigned int) (i)))
+
 #include <avr/io.h>
 #include <avr/interrupt.h>
+#include <avr/eeprom.h>
 #include <util/delay.h>
 #include "HC_SR04.h"
 #include "uart.h"
@@ -42,8 +46,6 @@ int main(void)
     PORTB |= (1 << PINB4);
     uartInit();
     start_Timer_1();        //Timer for Messuring Sensor Delay
-
-    int ofs[Nr_Sens/2] = {0};
 
     while(1)
     {
@@ -61,8 +63,8 @@ int main(void)
             }
             for (unsigned char i = 0; i < (Nr_Sens/2); i++)
             {
-                ofs[i] = velocity(avg[i*2]/Nr_Med, avg[(i*2)+1]/Nr_Med);
-                uartWriteIntLine(ofs[i]);
+                writeOfs(i, velocity(avg[i*2]/Nr_Med, avg[(i*2)+1]/Nr_Med));
+                uartWriteIntLine(readOfs(i));
             }
         }
         //take regular messurment
@@ -74,7 +76,7 @@ int main(void)
         }
         for (unsigned char i = 0; i < Nr_Sens; i += 2)
         {
-            uartWriteInt(velocity(time[i], time[i+1])-ofs[i/2]);
+            uartWriteInt(velocity(time[i], time[i+1])-readOfs(i/2));
         }
         
         uartWriteIntArray(time, Nr_Sens);
