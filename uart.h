@@ -91,6 +91,13 @@ void uartWriteIntArray(unsigned int in[], unsigned char n)
     uartWriteString("\r\n");
 }
 
+void uartWriteRawInt(int in)
+{
+
+    USART_Transmit((in & 0xFF00) >> 8);
+    USART_Transmit((in & 0x00FF) >> 0);
+}
+
 void uartInit(void)
 {
     UBRRH = UBRR_VAL >> 8;

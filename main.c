@@ -75,10 +75,8 @@ int main(void)
         }
         for (unsigned char i = 0; i < Nr_Sens; i += 2)
         {
-            uartWriteInt(velocity(time[i], time[i+1])-readOfs(i/2));
-        }   
-        uartWriteString("\n\r");
-        _delay_ms(50);
+            uartWriteRawInt(velocity(time[i], time[i+1])-readOfs(i/2));
+        }
     }
 }
 
