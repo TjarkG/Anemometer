@@ -16,12 +16,15 @@
 #define F_CPU       16000000UL
 #define S_SENSOR    200         //Distance betwen Sensors in mm
 #define Nr_Sens     2           //Number of Sensors connected
+#define Nr_Med      32          //Number of readings used when setting offset
 
 #define TIME    (PIND & (1 << 6))
 #define PULS    (PIND & (1 << 5))
 #define PULS2   (PIND & (1 << 4))
 #define TRIG_PORT PORTD
 #define TRIG_PIN PIND3
+
+#define SET0    (PINB & (1 << 4))
 
 #include <avr/io.h>
 #include <avr/interrupt.h>
@@ -36,23 +39,44 @@ int main(void)
 {
     DDRD = (1 << 1) | (1 << 3);
     DDRB = (1 << 0) | (1 << 1) | (1 << 2);
+    PORTB |= (1 << PINB4);
     uartInit();
     start_Timer_1();        //Timer for Messuring Sensor Delay
 
+    int ofs[Nr_Sens/2] = {0};
+
     while(1)
     {
+        //Set offsets if button is pressed
+        if(!SET0)
+        {
+            unsigned long avg[Nr_Sens] = {0};
+            for (unsigned int i = 0; i < Nr_Med; i++)
+            {
+                for (unsigned char j = 0; j < Nr_Sens; j++)
+                {
+                    setAdr(j);
+                    avg[j] += getSensorTime();
+                }
+            }
+            for (unsigned char i = 0; i < (Nr_Sens/2); i++)
+            {
+                ofs[i] = velocity(avg[i*2]/Nr_Med, avg[(i*2)+1]/Nr_Med);
+                uartWriteIntLine(ofs[i]);
+            }
+        }
+        //take regular messurment
         unsigned int time[Nr_Sens];
         for (unsigned char i = 0; i < Nr_Sens; i++)
         {
             setAdr(i);
             time[i] = getSensorTime();
         }
+        for (unsigned char i = 0; i < Nr_Sens; i += 2)
+        {
+            uartWriteInt(velocity(time[i], time[i+1])-ofs[i/2]);
+        }
         
-        //v = d/t
-        //long velocity = S_SENSOR/(time*1000);
-        uartWriteInt(velocity(time[0], time[1]));
-        //uartWriteIntLine(abs(((int)time[1]) - ((int)time[0])));
-
         uartWriteIntArray(time, Nr_Sens);
         _delay_ms(50);
     }
