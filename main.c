@@ -16,7 +16,7 @@
 #define F_CPU       16000000UL
 #define S_SENSOR    200         //Distance betwen Sensors in mm
 #define Nr_Sens     2           //Number of Sensors connected
-#define Nr_Med      32          //Number of readings used when setting offset
+#define Nr_Med      256          //Number of readings used when setting offset
 
 #define TIME    (PIND & (1 << 6))
 #define PULS    (PIND & (1 << 5))
@@ -64,7 +64,6 @@ int main(void)
             for (unsigned char i = 0; i < (Nr_Sens/2); i++)
             {
                 writeOfs(i, velocity(avg[i*2]/Nr_Med, avg[(i*2)+1]/Nr_Med));
-                uartWriteIntLine(readOfs(i));
             }
         }
         //take regular messurment
@@ -77,9 +76,8 @@ int main(void)
         for (unsigned char i = 0; i < Nr_Sens; i += 2)
         {
             uartWriteInt(velocity(time[i], time[i+1])-readOfs(i/2));
-        }
-        
-        uartWriteIntArray(time, Nr_Sens);
+        }   
+        uartWriteString("\n\r");
         _delay_ms(50);
     }
 }
