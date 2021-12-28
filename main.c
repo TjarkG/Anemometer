@@ -21,7 +21,8 @@
 
 #define TIME    (PIND & (1 << 6))
 #define PULS    (PIND & (1 << 5))
-#define PULS2   (PIND & (1 << 4))
+#define PULS2   (PIND & (1 << 2))
+#define PULS4   (PIND & (1 << 4))
 #define TRIG_PORT PORTD
 #define TRIG_PIN PIND3
 
@@ -86,7 +87,6 @@ int main(void)
             uartWriteInt(velocity(time[i], time[i+1])-readOfs(i/2));
             uartWriteInt(time[i]);
             uartWriteIntLine(time[i+1]);
-            _delay_ms(100);
             #else
             uartWriteRawInt(velocity(time[i], time[i+1])-readOfs(i/2));
             #endif

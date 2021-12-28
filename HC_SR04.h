@@ -64,7 +64,7 @@ unsigned int getSensorTime(void) //returns Time in µs
 
 	while(TIME && ++i < TMAX)
 		_delay_us(1);
-	out = (TCNT1<<2) | ((!!PULS)<<1) | (!!PULS2);	//combine internall counter with state of input pins
+	out = (TCNT1<<3) | ((!!PULS)<<2) | ((!!PULS2)<<1) | (!!PULS4);	//combine internall counter with state of input pins
 	TGR_HIGH;
 
 	out -= OFFSET;

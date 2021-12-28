@@ -2135,9 +2135,9 @@ design rules under a new name.</description>
 <contactref element="IC1" pad="7"/>
 <contactref element="IC8" pad="2"/>
 <wire x1="30.48" y1="55.88" x2="38.1" y2="55.88" width="0.3048" layer="16"/>
-<wire x1="38.1" y1="55.88" x2="38.1" y2="86.36" width="0.3048" layer="16"/>
-<via x="38.1" y="86.36" extent="1-16" drill="0.35"/>
-<wire x1="38.1" y1="86.36" x2="38.1" y2="96.52" width="0.3048" layer="1"/>
+<wire x1="38.1" y1="55.88" x2="38.1" y2="83.82" width="0.3048" layer="16"/>
+<via x="38.1" y="83.82" extent="1-16" drill="0.35"/>
+<wire x1="38.1" y1="83.82" x2="38.1" y2="96.52" width="0.3048" layer="1"/>
 <via x="38.1" y="96.52" extent="1-16" drill="0.35"/>
 <wire x1="38.1" y1="96.52" x2="58.42" y2="96.52" width="0.3048" layer="16"/>
 <wire x1="58.42" y1="96.52" x2="58.42" y2="91.44" width="0.3048" layer="16"/>
@@ -2511,11 +2511,11 @@ design rules under a new name.</description>
 </signal>
 <signal name="PULS">
 <contactref element="IC1" pad="9"/>
-<contactref element="IC8" pad="4"/>
 <wire x1="30.48" y1="60.96" x2="33.02" y2="60.96" width="0.3048" layer="16"/>
-<wire x1="33.02" y1="93.98" x2="53.34" y2="93.98" width="0.3048" layer="16"/>
-<wire x1="53.34" y1="93.98" x2="53.34" y2="91.44" width="0.3048" layer="16"/>
+<wire x1="33.02" y1="93.98" x2="50.8" y2="93.98" width="0.3048" layer="16"/>
 <wire x1="33.02" y1="60.96" x2="33.02" y2="93.98" width="0.3048" layer="16"/>
+<contactref element="IC8" pad="5"/>
+<wire x1="50.8" y1="91.44" x2="50.8" y2="93.98" width="0.3048" layer="16"/>
 </signal>
 <signal name="TIME">
 <contactref element="IC1" pad="11"/>
@@ -2532,12 +2532,15 @@ design rules under a new name.</description>
 <via x="22.86" y="81.28" extent="1-16" drill="0.35"/>
 </signal>
 <signal name="PULS*2">
-<contactref element="IC1" pad="8"/>
-<contactref element="IC8" pad="3"/>
-<wire x1="35.56" y1="58.42" x2="30.48" y2="58.42" width="0.3048" layer="16"/>
-<wire x1="55.88" y1="91.44" x2="55.88" y2="88.9" width="0.3048" layer="16"/>
-<wire x1="55.88" y1="88.9" x2="35.56" y2="88.9" width="0.3048" layer="16"/>
-<wire x1="35.56" y1="88.9" x2="35.56" y2="58.42" width="0.3048" layer="16"/>
+<contactref element="IC8" pad="4"/>
+<contactref element="IC1" pad="6"/>
+<wire x1="30.48" y1="53.34" x2="27.94" y2="53.34" width="0.3048" layer="16"/>
+<wire x1="27.94" y1="53.34" x2="27.94" y2="88.9" width="0.3048" layer="16"/>
+<wire x1="53.34" y1="91.44" x2="53.34" y2="88.9" width="0.3048" layer="16"/>
+<wire x1="53.34" y1="88.9" x2="35.56" y2="88.9" width="0.3048" layer="16"/>
+<via x="35.56" y="88.9" extent="1-16" drill="0.35"/>
+<wire x1="35.56" y1="88.9" x2="27.94" y2="88.9" width="0.3048" layer="1"/>
+<via x="27.94" y="88.9" extent="1-16" drill="0.35"/>
 </signal>
 <signal name="A">
 <contactref element="IC1" pad="12"/>
@@ -2889,6 +2892,14 @@ design rules under a new name.</description>
 <wire x1="10.16" y1="50.8" x2="22.86" y2="50.8" width="0.3048" layer="16"/>
 <contactref element="R9" pad="1"/>
 <wire x1="10.16" y1="45.72" x2="10.16" y2="50.8" width="0.3048" layer="16"/>
+</signal>
+<signal name="PULS*4">
+<contactref element="IC8" pad="3"/>
+<contactref element="IC1" pad="8"/>
+<wire x1="35.56" y1="58.42" x2="30.48" y2="58.42" width="0.3048" layer="16"/>
+<wire x1="55.88" y1="86.36" x2="35.56" y2="86.36" width="0.3048" layer="16"/>
+<wire x1="35.56" y1="86.36" x2="35.56" y2="58.42" width="0.3048" layer="16"/>
+<wire x1="55.88" y1="91.44" x2="55.88" y2="86.36" width="0.3048" layer="16"/>
 </signal>
 </signals>
 <mfgpreviewcolors>
