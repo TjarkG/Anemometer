@@ -16,7 +16,8 @@
 #define F_CPU       16000000UL
 #define S_SENSOR    200         //Distance betwen Sensors in mm
 #define Nr_Sens     2           //Number of Sensors connected
-#define Nr_Med      256          //Number of readings used when setting offset
+#define Nr_Med      128         //Number of readings used when setting offset
+#define ASCII                   //Comment out for raw output
 
 #define TIME    (PIND & (1 << 6))
 #define PULS    (PIND & (1 << 5))
@@ -60,10 +61,16 @@ int main(void)
                     setAdr(j);
                     avg[j] += getSensorTime();
                 }
+                _delay_ms(20);
             }
             for (unsigned char i = 0; i < (Nr_Sens/2); i++)
             {
-                writeOfs(i, velocity(avg[i*2]/Nr_Med, avg[(i*2)+1]/Nr_Med));
+                unsigned int t1 = (avg[(i*2)]/Nr_Med);
+                unsigned int t2 = avg[(i*2)+1]/Nr_Med;
+                writeOfs(i, velocity(t1, t2));
+                #ifdef ASCII
+                uartWriteIntLine(readOfs(i));
+                #endif
             }
         }
         //take regular messurment
@@ -75,7 +82,14 @@ int main(void)
         }
         for (unsigned char i = 0; i < Nr_Sens; i += 2)
         {
+            #ifdef ASCII
+            uartWriteInt(velocity(time[i], time[i+1])-readOfs(i/2));
+            uartWriteInt(time[i]);
+            uartWriteIntLine(time[i+1]);
+            _delay_ms(100);
+            #else
             uartWriteRawInt(velocity(time[i], time[i+1])-readOfs(i/2));
+            #endif
         }
     }
 }
