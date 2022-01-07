@@ -15,7 +15,7 @@
 
 #define F_CPU       16000000UL
 #define S_SENSOR    200         //Distance betwen Sensors in mm
-#define Nr_Sens     2           //Number of Sensors connected
+#define Nr_Sens     1           //Number of Sensors connected
 #define Nr_Med      128         //Number of readings used when setting offset
 #define ASCII                   //Comment out for raw output
 
@@ -23,6 +23,7 @@
 #define PULS    (PIND & (1 << 5))
 #define PULS2   (PIND & (1 << 2))
 #define PULS4   (PIND & (1 << 4))
+#define ECHO    (PINB & (1 << 3))
 #define TRIG_PORT PORTD
 #define TRIG_PIN PIND3
 
@@ -48,49 +49,13 @@ int main(void)
     PORTB |= (1 << PINB4);
     uartInit();
     start_Timer_1();        //Timer for Messuring Sensor Delay
+    setAdr(0);
 
     while(1)
     {
-        //Set offsets if button is pressed
-        if(!SET0)
-        {
-            unsigned long avg[Nr_Sens] = {0};
-            for (unsigned int i = 0; i < Nr_Med; i++)
-            {
-                for (unsigned char j = 0; j < Nr_Sens; j++)
-                {
-                    setAdr(j);
-                    avg[j] += getSensorTime();
-                }
-                _delay_ms(20);
-            }
-            for (unsigned char i = 0; i < (Nr_Sens/2); i++)
-            {
-                unsigned int t1 = (avg[(i*2)]/Nr_Med);
-                unsigned int t2 = avg[(i*2)+1]/Nr_Med;
-                writeOfs(i, velocity(t1, t2));
-                #ifdef ASCII
-                uartWriteIntLine(readOfs(i));
-                #endif
-            }
-        }
-        //take regular messurment
-        unsigned int time[Nr_Sens];
-        for (unsigned char i = 0; i < Nr_Sens; i++)
-        {
-            setAdr(i);
-            time[i] = getSensorTime();
-        }
-        for (unsigned char i = 0; i < Nr_Sens; i += 2)
-        {
-            #ifdef ASCII
-            uartWriteInt(velocity(time[i], time[i+1])-readOfs(i/2));
-            uartWriteInt(time[i]);
-            uartWriteIntLine(time[i+1]);
-            #else
-            uartWriteRawInt(velocity(time[i], time[i+1])-readOfs(i/2));
-            #endif
-        }
+        int time;
+        time = getSensorTime();
+        uartWriteIntLine(time);
     }
 }
 

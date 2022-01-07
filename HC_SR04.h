@@ -14,7 +14,7 @@
 #include <avr/interrupt.h>
 #include <util/delay.h>
 
-#define TMAX	5000	//maximum time waiting for a pulse in µs
+#define TMAX	10000	//maximum time waiting for a pulse in µs
 #define OFFSET	0		//Timer Cycles to subtract from messured time
 
 #define TGR_HIGH	TRIG_PORT |= (1<<TRIG_PIN)
@@ -39,7 +39,7 @@
 #endif
 
 void start_Timer_1(void);
-unsigned int getSensorTime(void);
+int getSensorTime(void);
 
 void start_Timer_1(void)
 {
@@ -51,25 +51,21 @@ void start_Timer_1(void)
 	TCNT1 = 0;
 }
 
-unsigned int getSensorTime(void) //returns Time in µs
+int getSensorTime(void) //returns Time in something
 {
-	unsigned int out = 0;
 	unsigned int i = 0;
-
-	TCNT1 = 0;					//clear counter
+	unsigned int out = 0;
 	TGR_LOW;
+	_delay_us(10);
 
-	while(!TIME && ++i < TMAX)
+	while( !ECHO && i++ < TMAX )
 		_delay_us(1);
-
-	while(TIME && ++i < TMAX)
+	while( ECHO && out++ < TMAX )
 		_delay_us(1);
-	out = (TCNT1<<3) | ((!!PULS)<<2) | ((!!PULS2)<<1) | (!!PULS4);	//combine internall counter with state of input pins
+		
 	TGR_HIGH;
-
-	out -= OFFSET;
-	_delay_ms(3);
-	return i>=TMAX? 0 : out;
+	_delay_ms(15);
+	return (i>=(TMAX-1) || out>=(TMAX-1))? 0 : out;
 }
 
 #endif /* HC_SR04_H_ */
